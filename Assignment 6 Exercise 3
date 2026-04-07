@@ -1,0 +1,41 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <ctype.h>
+
+#define MAXSTACK 100
+
+double stack[MAXSTACK];
+int sp = 0;
+
+void push(double val) {
+    stack[sp++] = val;
+}
+
+double pop() {
+    return stack[--sp];
+}
+
+int is_number(char *s) {
+    return isdigit(s[0]);
+}
+
+int main(int argc, char *argv[]) {
+    for (int i = 1; i < argc; i++) {
+        if (is_number(argv[i])) {
+            push(atof(argv[i]));
+        } else {
+            double op2 = pop();
+            double op1 = pop();
+
+            switch (argv[i][0]) {
+                case '+': push(op1 + op2); break;
+                case '-': push(op1 - op2); break;
+                case '*': push(op1 * op2); break;
+                case '/': push(op1 / op2); break;
+            }
+        }
+    }
+
+    printf("Result = %.2f\n", pop());
+}
