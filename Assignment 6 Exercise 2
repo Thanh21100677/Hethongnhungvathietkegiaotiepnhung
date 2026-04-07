@@ -1,0 +1,47 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#define MAXLINES 100
+
+char *lines[MAXLINES];
+
+char* get_field(char *line, int field) {
+    char *token;
+    int count = 1;
+
+    token = strtok(line, " \t\n");
+    while (token != NULL) {
+        if (count == field) return token;
+        token = strtok(NULL, " \t\n");
+        count++;
+    }
+    return "";
+}
+
+int numcmp(const char *s1, const char *s2) {
+    return atof(s1) - atof(s2);
+}
+
+int cmp(const void *a, const void *b) {
+    char temp1[100], temp2[100];
+
+    strcpy(temp1, *(char **)a);
+    strcpy(temp2, *(char **)b);
+
+    char *f1 = get_field(temp1, 2); // field 2
+    char *f2 = get_field(temp2, 2);
+
+    return numcmp(f1, f2);
+}
+
+int main() {
+    lines[0] = "abc 10";
+    lines[1] = "xyz 5";
+    lines[2] = "hello 20";
+
+    qsort(lines, 3, sizeof(char *), cmp);
+
+    for (int i = 0; i < 3; i++)
+        printf("%s\n", lines[i]);
+}
